@@ -38,11 +38,48 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+// line 41: callback passed in because I need to be using it somewhere else in the code block;
+
+exports.getNextUniqueId = (callback) => {
+  // first readFile to get current ID/counter;
+  // then add 1 to current ID/counter;
+  // write the new uniqID to the counterFile;
+
+  // VERSION 1:
+  // readCounter((error, counter) => {
+  //   if (error) {
+  //     callback(null, 0)  // better than throw error;
+  //   }
+  //   else {
+  //     counter = counter + 1;
+  //     writeCounter(counter, (error, id) => {
+  //       if (error) throw error;
+  //       else {
+  //         callback(null, id)
+  //       }
+  //     })
+  //   }
+  // });
+
+  // return zeroPaddedNumber(counter);  // <--- using this line at writeCounter()
+
+  // VERSION 2:
+  readCounter((error, value) => {
+    writeCounter(value + 1, (error, ID) => {
+      callback(error, ID);
+    });
+  });
+
+  // VERSION 3:
+  // readCounter((error, value) => {
+  //   writeCounter(value + 1, callback);
+  // });
 };
 
+// what is the test doing,
+// what is the output / input
+// what are the expectations from the test
+// observation in glearn, read the fucking prompt!
 
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
